@@ -92,10 +92,40 @@ var BinaryTree = function(){
                 }else{
                     return false
                 }
+            }    
+    }
+    var finMinNode = function(node){
+        while(node && node.left !== null){
+            node = node.left
+        }
+        return node
+    }
+    var Remove = function(node,key){//删除指定的节点
+        if(node.key === key){
+            if(node.left === null && node.right === null){
+                node = null
+                return node
+            }else if(node.left !== null && node.right === null){
+                node = node.left
+                return node
+            }else if(node.left === null && node.right !== null){
+                node = node.right
+                return node
+            }else if(node.left !== null && node.right !== null){
+                var minNode = finMinNode(node.right)
+                node.key = minNode.key
+                node.right = Remove(node.right,minNode.key)
+                return node
             }
-       
-       
-        
+        }else{
+            if(key > node.key){
+                node.right = Remove(node.right,key)
+                return node
+            }else if(key < node.key){
+                node.left = Remove(node.left,key)
+                return node
+            }
+        }
     }
 
     this.inOrderTraverse = function(callback){//中序遍历接口
@@ -123,9 +153,13 @@ var BinaryTree = function(){
     this.search = function(key){//寻找指定值接口
         return Search(root,key)
     }
+
+    this.remove = function(key){//删除指点节点接口
+        Remove(root,key)
+    }
 }
 
-var nodes = [2,13,6,8,81,9,16,13,100,1]
+var nodes = [2,13,6,10,18,12,0,12,16,89,55,66,100]
 // 
 var binaryTree = new BinaryTree()
 nodes.forEach((item)=>{
@@ -145,7 +179,11 @@ var callback = function(item){
 
 //console.log(binaryTree.min())//寻找最小值
 
-console.log(binaryTree.search(100))
+//console.log(binaryTree.search(100))//寻找指定值
+
+binaryTree.remove(12)
+binaryTree.inOrderTraverse(callback)
+
 
 
 
